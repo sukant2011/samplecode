@@ -24,50 +24,7 @@ document.onreadystatechange = function () {
 		setTimeout(function(){$('#body').css("min-height",(parseInt($( window ).height())-55)+"px");},500);
 		
 	});
-	/*Search by City or ZIP Script*/
-	$('#getEstimate').click(function(){
-		
-		var org_val = $("#getEstimate").val();//MAKE THE BUTTON FADE AFTER CLICKED ON IT
-		$("#getEstimate").val('Wait...');//MAKE THE BUTTON FADE AFTER CLICKED ON IT
-		$("#getEstimate").attr('disabled',true);//MAKE THE BUTTON FADE AFTER CLICKED ON IT
-		$("#ajaxLoad").show();//SHOW THE LOADER WHEN AJAX REQUESTED
-		$('#innerCont').addClass('overlayBg');
-		
-		var search = $('#city_zip').val();
-		var checkValidate = true;	
-		var message = '';	
-		$("span.customerrorCity").html(message);
-		
-		$("#estimateForm input[required=true]").each(function(){
-			$(this).css('border-color',''); 
-			if(!$.trim($(this).val())){ //if this field is empty 
-				$(this).css('border-color','red'); //change border color to red   
-				checkValidate = false; //set do not proceed flag
-				message = 'This field is required.';				
-				$("span.customerrorCity").html(message);
-			}
-		});	
-			
-		if(checkValidate && search!=''){
-			
-			var urlToExecute = '{{ host }}/sample-poi-code?cityzip='+search;
-			
-			//reset previously set border colors and hide all message on .keyup()
-			$("#estimateForm  input[required=true]").keyup(function() { 
-				$(this).css('border-color',''); 
-				//$("#result").slideUp();
-			});
-			$("#getEstimate").val(org_val);//MAKE THE BUTTON FADE AFTER CLICKED ON IT
-			$("#getEstimate").attr('disabled',false);	
-			window.location.href = urlToExecute;
-		}
-		$("#getEstimate").val(org_val);//MAKE THE BUTTON FADE AFTER CLICKED ON IT
-		$("#getEstimate").attr('disabled',false);
-		$("#ajaxLoad").hide();//HIDE THE LOADER WHEN AJAX REQUESTED
-		$('#innerCont').removeClass('overlayBg');
-		
-	});
-	/*Search School Script*/
+	
 	
 	
 	$('.businessCatAction').on('click',function(){
@@ -128,7 +85,7 @@ document.onreadystatechange = function () {
 			
 			
 				
-			var urlToExecute = '{{ host }}/sample-poi-code?address='+search+'&radius='+radius;
+			var urlToExecute = 'index.php?address='+search+'&radius='+radius;
 			
 			//reset previously set border colors and hide all message on .keyup()
 			$("#searchByPropForm  input[required=true]").keyup(function() { 

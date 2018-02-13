@@ -64,9 +64,9 @@
 						
 						<input class="form-control" id="search" type="text" placeholder="By Property"  onFocus="geolocate()" required="true" value="<?php echo urldecode($addressPosted); ?>"/>
 						
-						<input type="hidden" id="radius" name="radius" value="5">
+						<input type="hidden" id="radius" name="radius" value="<?php echo(@$_GET['radius']!=''?@$_GET['radius']:'5'); ?>">
 						 <div class="dropdown">
-							<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">Radius in Miles
+							<button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><?php echo(@$_GET['radius']!=''?@$_GET['radius'].' Miles':'Radius in Miles'); ?>
 							<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 								<li><a href="javascript:void(0);" data-val="0.5">0.5 Mile</a></li>
