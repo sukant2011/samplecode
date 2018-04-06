@@ -48,5 +48,26 @@ class model
 		$url = $this->obapiurl ."/poisearch/v2.0.0/poi/street+address?StreetAddress=$address&SearchDistance=$radius&RecordLimit=50";
 		return $this->curlPOIAPI($url);  
 	}
+	
+	public function getCommunityByAreaId1($areaid)
+    {
+		$url = $this->obapiurl . "/communityapi/v2.0.0/area/full?AreaId=" . $areaid;
+    	
+		$result_community1 = $this->curlPOIAPI($url); 	
+			
+		$communityData = array();
+	
+		if(count(@$result_community1['response']['result']['package']['item'])>0){
+			foreach($result_community1['response']['result']['package']['item'][0] as $resultCommKey=>$resultCommVal){
+					$communityData[strtoupper($resultCommKey)] = $resultCommVal;
+			}
+		}
+		
+		$communityData1[0] = $communityData;
+		
+		$communityDataFinal = json_decode (json_encode ($communityData1), FALSE);
+		
+		return $communityDataFinal;
+	}
 }	
 ?>

@@ -54,27 +54,43 @@ require_once("lib/api.php");
 		$amenitiesData = array();
 		$uniqueBusinessCat = array();	
 		$poiData = $poiObj->getPoiData(urlencode($poiAddr),$radiusPosted);
+		$communityData = $poiObj->getCommunityByAreaId1('ZI'.$zipCode);
+		$nearestSport = $communityData[0]->TEAM;
+		$nearestAirport = $communityData[0]->AIRPORT;
+		
 		$distanceSortedArr = array();
+		$distanceSortedCatonlyArr = array();
 		
 		if (@$poiData['response']['status']['code'] == 0) {
-			$sourceLocationLatitude = $poiData['response']['result']['package']['item'][0]['geo_latitude'];
-			$sourceLocationLongitude = $poiData['response']['result']['package']['item'][0]['geo_longitude'];
-			foreach($poiData['response']['result']['package']['item'] as $amenities){
-				if($businessCat!='' && is_array($businessCat)){
-					if(in_array(strtolower($amenities['business_category']),$businessCat)){
+				//$mapAmenities = $poiData['response']['result']['package']['item'];
+			
+				$sourceLocationLatitude = $poiData['response']['result']['package']['item'][0]['geo_latitude'];
+				$sourceLocationLongitude = $poiData['response']['result']['package']['item'][0]['geo_longitude'];
+				foreach($poiData['response']['result']['package']['item'] as $amenities){
+					if($businessCat!='' && is_array($businessCat)){
+						if(in_array(strtolower($amenities['business_category']),$businessCat)){
+							$distanceSortedArr[$amenities['distance']][] = $amenities;
+							$distanceSortedCatonlyArr[$amenities['distance']][] = strtolower(str_replace(array(" - "," "),array('-','-'),$amenities['business_category']));
+							$amenitiesData[ucwords(strtolower($amenities['business_category']))][] = $amenities;
+						}
+					}else{
 						$distanceSortedArr[$amenities['distance']][] = $amenities;
 						$amenitiesData[ucwords(strtolower($amenities['business_category']))][] = $amenities;
+						$distanceSortedCatonlyArr[$amenities['distance']][] = strtolower(str_replace(array(" - "," "),array('-','-'),$amenities['business_category']));
 					}
-				}else{
-					$distanceSortedArr[$amenities['distance']][] = $amenities;
-					$amenitiesData[ucwords(strtolower($amenities['business_category']))][] = $amenities;
 				}
+				
+				ksort($amenitiesData);
+				ksort($distanceSortedArr);
+				ksort($distanceSortedCatonlyArr);
+				
+				
+				//echo '<pre>';print_r($distanceSortedArr);
+				//echo '<pre>';print_r($distanceSortedCatonlyArr);die;
+				
+				$divideBy = round(count($amenitiesData)/2);
+				$splitAmenityData = array_chunk($amenitiesData,$divideBy,true);
 			}
-			ksort($amenitiesData);
-			ksort($distanceSortedArr);
-			$divideBy = round(count($amenitiesData)/2);
-			$splitAmenityData = array_chunk($amenitiesData,$divideBy,true);			
-		}
 	}	
 
 ?>
